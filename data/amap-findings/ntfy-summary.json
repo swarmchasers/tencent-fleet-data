@@ -1,0 +1,35 @@
+{
+  "generated_at": "2026-11-01T20:44:07.763473+00:00",
+  "records": 377,
+  "message_records": 377,
+  "observations_without_event_id": 0,
+  "roots": {
+    "findings": "/Users/concurrent/Projects/oai-scraping-test/findings",
+    "ntfy_archiver": "/Users/concurrent/Projects/chinese-swarm/ntfy-archiver",
+    "hosted_probe_leads": "/Users/concurrent/Projects/chinese-swarm/hosted-probe-leads"
+  },
+  "files": {
+    "files_considered": 41823,
+    "files_with_amap_topic_reference": 150,
+    "duplicate_files": 15,
+    "idless_observations_linked_by_exact_topic_time_content": 27
+  },
+  "unreadable_files": [],
+  "redaction_audit": {
+    "sensitive_assignments": 0,
+    "hex32_values": 0,
+    "encoded_carriers": 0,
+    "sensitive_inputs": 0
+  },
+  "scope_evidence": [
+    "ntfy_archiver:topic-additions/20261006T042148Z-amap-only-correction.json",
+    "ntfy_archiver:topic-additions/20261007T000006Z-amapmc-added.json"
+  ],
+  "deduplication": "Same topic, ID, timestamp, event type and message content merge across snapshots. Expiry and capture metadata are preserved separately. Changed content under the same ID remains a separate version.",
+  "limitations": [
+    "Saved local snapshots only. No live ntfy requests or attachments downloaded.",
+    "Messages without IDs or publication timestamps are explicitly labeled as observations.",
+    "Topic-level scan links do not identify which scan produced a specific message.",
+    "Secrets and encoded carriers are conservatively redacted with the same rules as the URLQuery export."
+  ]
+}

@@ -1,0 +1,44 @@
+{
+  "webhooks": {
+    "request_versions": 627,
+    "unique_requests": 627,
+    "configuration_versions": 31,
+    "mailboxes_with_captures": 22,
+    "mailboxes_in_scope": 30,
+    "source_file_stats": {
+      "files_considered": 43059,
+      "duplicate_files": 429
+    },
+    "unreadable_files": [],
+    "redaction_audit": {
+      "sensitive_assignments": 0,
+      "hex32_values": 0,
+      "encoded_carriers": 0,
+      "sensitive_inputs": 0
+    }
+  },
+  "attachments": {
+    "referenced_attachments": 1,
+    "attachment_records": 1,
+    "cached_attachments_exported": 1,
+    "redaction_audit": {
+      "sensitive_assignments": 0,
+      "hex32_values": 0,
+      "encoded_carriers": 0,
+      "sensitive_inputs": 0
+    }
+  },
+  "roots": {
+    "findings": "/Users/concurrent/Projects/oai-scraping-test/findings",
+    "hosted_probe_leads": "/Users/concurrent/Projects/chinese-swarm/hosted-probe-leads",
+    "ntfy_archiver": "/Users/concurrent/Projects/chinese-swarm/ntfy-archiver"
+  },
+  "methodology": [
+    "Only saved local archives are read; no database export is imported.",
+    "Mailbox scope comes from saved Amap archiver decisions and links in the existing Amap report collection; explicitly classified cancer collectors are excluded.",
+    "Webhook request objects are deduplicated across captures; changed objects retain distinct versions. Redacted identical versions are merged.",
+    "Public mailbox and request identifiers remain available for joins; authentication headers, API keys and security codes are redacted.",
+    "Attachment content is linked to retained ntfy messages and verified against saved size/checksum metadata before redaction.",
+    "No remote mailbox requests, attachment fetches, or S3 downloads are performed."
+  ]
+}

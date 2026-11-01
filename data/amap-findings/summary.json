@@ -1,0 +1,177 @@
+{
+  "schema_version": "1.0",
+  "generated_at": "2026-11-01T20:42:13.305696+00:00",
+  "source_directory": "/Users/concurrent/Projects/oai-scraping-test/findings",
+  "reports": 3105,
+  "reports_with_raw_captures": 2858,
+  "reports_with_decoded_payloads": 714,
+  "reports_with_proxy_evidence": 220,
+  "unique_decoded_payloads": 775,
+  "file_counts": {
+    "structured_files_considered": 30355,
+    "parsed_files": 21817,
+    "duplicate_files": 8503,
+    "csv_inventories": 19,
+    "html_files_with_report_links": 2033,
+    "reports_added_from_csv_or_html": 5
+  },
+  "parse_errors": [
+    {
+      "source_file": "agents-luna-egress-20261007/extra-interrupted-run/overlapping-event-streams/round-006.events.jsonl",
+      "error_type": "JSONDecodeError"
+    },
+    {
+      "source_file": "agents-luna-egress-20261007/extra-interrupted-run/overlapping-event-streams/round-007.events.jsonl",
+      "error_type": "JSONDecodeError"
+    },
+    {
+      "source_file": "agents-luna-egress-20261007/extra-interrupted-run/overlapping-event-streams/round-008.events.jsonl",
+      "error_type": "JSONDecodeError"
+    },
+    {
+      "source_file": "agents-luna-egress-20261007/extra-interrupted-run/overlapping-event-streams/round-009.events.jsonl",
+      "error_type": "JSONDecodeError"
+    },
+    {
+      "source_file": "agents-luna-egress-20261007/extra-interrupted-run/overlapping-event-streams/round-010.events.jsonl",
+      "error_type": "JSONDecodeError"
+    },
+    {
+      "source_file": "agents-luna-egress-20261007/extra-interrupted-run/overlapping-event-streams/round-011.events.jsonl",
+      "error_type": "JSONDecodeError"
+    },
+    {
+      "source_file": "agents-luna-egress-20261007/extra-interrupted-run/overlapping-event-streams/round-012.events.jsonl",
+      "error_type": "JSONDecodeError"
+    },
+    {
+      "source_file": "agents-luna-egress-20261007/extra-interrupted-run/overlapping-event-streams/round-013.events.jsonl",
+      "error_type": "JSONDecodeError"
+    },
+    {
+      "source_file": "agents-luna-egress-20261007/extra-interrupted-run/overlapping-event-streams/round-014.events.jsonl",
+      "error_type": "JSONDecodeError"
+    },
+    {
+      "source_file": "agents-luna-egress-20261007/extra-interrupted-run/overlapping-event-streams/round-015.events.jsonl",
+      "error_type": "JSONDecodeError"
+    },
+    {
+      "source_file": "agents-luna-egress-20261007/extra-interrupted-run/overlapping-event-streams/round-016.events.jsonl",
+      "error_type": "JSONDecodeError"
+    },
+    {
+      "source_file": "agents-luna-egress-20261007/extra-interrupted-run/overlapping-event-streams/round-017.events.jsonl",
+      "error_type": "JSONDecodeError"
+    },
+    {
+      "source_file": "agents-luna-egress-20261007/extra-interrupted-run/overlapping-event-streams/round-018.events.jsonl",
+      "error_type": "JSONDecodeError"
+    },
+    {
+      "source_file": "agents-luna-egress-20261007/extra-interrupted-run/overlapping-event-streams/round-019.events.jsonl",
+      "error_type": "JSONDecodeError"
+    },
+    {
+      "source_file": "agents-luna-egress-20261007/extra-interrupted-run/overlapping-event-streams/round-020.events.jsonl",
+      "error_type": "JSONDecodeError"
+    },
+    {
+      "source_file": "agents-luna-egress-20261007/extra-interrupted-run/overlapping-event-streams/round-021.events.jsonl",
+      "error_type": "JSONDecodeError"
+    },
+    {
+      "source_file": "agents-luna-egress-20261007/extra-interrupted-run/overlapping-event-streams/round-022.events.jsonl",
+      "error_type": "JSONDecodeError"
+    },
+    {
+      "source_file": "agents-luna-egress-20261007/extra-interrupted-run/overlapping-event-streams/round-023.events.jsonl",
+      "error_type": "JSONDecodeError"
+    },
+    {
+      "source_file": "agents-luna-egress-20261007/extra-interrupted-run/overlapping-event-streams/round-024.events.jsonl",
+      "error_type": "JSONDecodeError"
+    },
+    {
+      "source_file": "agents-luna-egress-20261007/extra-interrupted-run/overlapping-event-streams/round-025.events.jsonl",
+      "error_type": "JSONDecodeError"
+    },
+    {
+      "source_file": "agents-luna-egress-20261007/extra-interrupted-run/overlapping-event-streams/round-026.events.jsonl",
+      "error_type": "JSONDecodeError"
+    },
+    {
+      "source_file": "agents-luna-egress-20261007/extra-interrupted-run/overlapping-event-streams/round-027.events.jsonl",
+      "error_type": "JSONDecodeError"
+    },
+    {
+      "source_file": "agents-luna-egress-20261007/extra-interrupted-run/overlapping-event-streams/round-028.events.jsonl",
+      "error_type": "JSONDecodeError"
+    },
+    {
+      "source_file": "agents-luna-egress-20261007/extra-interrupted-run/overlapping-event-streams/round-029.events.jsonl",
+      "error_type": "JSONDecodeError"
+    },
+    {
+      "source_file": "agents-luna-egress-20261007/extra-interrupted-run/overlapping-event-streams/round-030.events.jsonl",
+      "error_type": "JSONDecodeError"
+    },
+    {
+      "source_file": "amap-followup-2026-10-05/workspace/data/amap-overnight-20261005/shmq-attribution-review/jina-reader-source/.vscode/launch.json",
+      "error_type": "JSONDecodeError"
+    },
+    {
+      "source_file": "amap-followup-2026-10-05/workspace/data/amap-overnight-20261005/shmq-attribution-review/jina-reader-source/.vscode/settings.json",
+      "error_type": "JSONDecodeError"
+    },
+    {
+      "source_file": "amap-followup-2026-10-05/workspace/data/amap-overnight-20261005/shmq-attribution-review/jina-reader-source/.vscode/tasks.json",
+      "error_type": "JSONDecodeError"
+    },
+    {
+      "source_file": "amap-followup-2026-10-05/workspace/data/urlquery-claude-suspects-20261004/hysandbox-cert/raw/crtsh-q-hysandbox.tencent-cloud.com.json",
+      "error_type": "JSONDecodeError"
+    },
+    {
+      "source_file": "amap-followup-2026-10-05/workspace/data/urlquery-claude-suspects-20261004/hysandbox-cert/raw/passive/threatminer-ip.json",
+      "error_type": "JSONDecodeError"
+    },
+    {
+      "source_file": "amap-internet-archive-since-20260915/cdx-01.json",
+      "error_type": "JSONDecodeError"
+    },
+    {
+      "source_file": "crawler-link-triage/live-novelty-text.jsonl",
+      "error_type": "JSONDecodeError"
+    },
+    {
+      "source_file": "dedyn-usercheck-20261023/captures/ct-oai-dedyn.json",
+      "error_type": "JSONDecodeError"
+    },
+    {
+      "source_file": "shortener-local-archive-20261016/sources/findings/shortlink-reference-resolution-20261008/decoded-message-request-audit-v2-progress.jsonl",
+      "error_type": "JSONDecodeError"
+    },
+    {
+      "source_file": "urlquery-internet-archive-20261005/responses/154.json",
+      "error_type": "JSONDecodeError"
+    }
+  ],
+  "redaction_audit": {
+    "sensitive_assignments": 0,
+    "hex32_values": 0,
+    "encoded_carriers": 0,
+    "sensitive_inputs": 0
+  },
+  "selection": "Amap/amap.com/Gaode references in saved report evidence, recorded URLs, and recursively decoded base64 carriers. Proxy and redirect wrappers included.",
+  "limitations": [
+    "Coverage is the local findings archive, including saved listings without full captures. No live URLQuery fetches.",
+    "Structured JSON/JSONL, gzip JSON, CSV report inventories and report rows in saved HTML listings are inspected. Standalone prose, images and SQLite databases are not scanned.",
+    "Base64 decoding is local, UTF-8 only, at most six nested levels and four million encoded characters per value.",
+    "Payloads include httpbin-compatible /base64/ carriers and nested base64/data-URI carriers. Original encoded carriers are suppressed to prevent secret recovery.",
+    "Proxy evidence indicates a known proxy service or proxy/cors URL marker within an Amap-related report; it does not prove every proxy URL targets Amap.",
+    "Secrets, 32-character hex values, and long opaque values are conservatively redacted. Sanitized evidence may no longer execute."
+  ],
+  "provenance": "Exact relative paths of saved files referencing each report ID, including filenames containing that ID.",
+  "provenance_files_inspected": 43868
+}
