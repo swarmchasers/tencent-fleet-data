@@ -1,12 +1,12 @@
 {
   "schema_version": "1.0",
-  "generated_at": "2026-11-01T20:42:13.305696+00:00",
+  "generated_at": "2026-11-01T21:06:05.765677+00:00",
   "source_directory": "/Users/concurrent/Projects/oai-scraping-test/findings",
-  "reports": 3105,
-  "reports_with_raw_captures": 2858,
-  "reports_with_decoded_payloads": 714,
-  "reports_with_proxy_evidence": 220,
-  "unique_decoded_payloads": 775,
+  "reports": 3068,
+  "reports_with_raw_captures": 2823,
+  "reports_with_decoded_payloads": 712,
+  "reports_with_proxy_evidence": 219,
+  "unique_decoded_payloads": 773,
   "file_counts": {
     "structured_files_considered": 30355,
     "parsed_files": 21817,
@@ -163,7 +163,7 @@
     "encoded_carriers": 0,
     "sensitive_inputs": 0
   },
-  "selection": "Amap/amap.com/Gaode references in saved report evidence, recorded URLs, and recursively decoded base64 carriers. Proxy and redirect wrappers included.",
+  "selection": "Amap/amap.com/Gaode references in saved report evidence, recorded URLs, and recursively decoded base64 carriers. Proxy and redirect wrappers included. Reports dated before 2026-09-30 UTC are excluded.",
   "limitations": [
     "Coverage is the local findings archive, including saved listings without full captures. No live URLQuery fetches.",
     "Structured JSON/JSONL, gzip JSON, CSV report inventories and report rows in saved HTML listings are inspected. Standalone prose, images and SQLite databases are not scanned.",

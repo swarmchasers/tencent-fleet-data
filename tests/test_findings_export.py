@@ -78,6 +78,11 @@ class FindingsTests(unittest.TestCase):
                          '2026-10-07T03:03:21+00:00')
         self.assertIsNone(exporter.earliest([]))
 
+    def test_reports_before_cutoff_are_excluded(self):
+        self.assertFalse(exporter.in_window({'dates': {'2026-09-29T23:59:59Z'}}))
+        self.assertTrue(exporter.in_window({'dates': {'2026-09-30 00:00:00+00:00'}}))
+        self.assertTrue(exporter.in_window({'dates': set()}))
+
     def test_listing_and_capture_merge(self):
         rid = '00000000-0000-4000-8000-000000000003'
         with tempfile.TemporaryDirectory() as temp:

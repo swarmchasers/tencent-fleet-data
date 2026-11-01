@@ -24,6 +24,7 @@ TARGET = re.compile(AMAP.pattern + r"|(?i:\bgaodemap\.com\b|\bgaode\.com\b|\bgao
 PROXY = re.compile(r"proxy|cors|allorigins|codetabs|jina\.ai|microlink|translate\.goog|translate\.google", re.I)
 REQUEST = re.compile(PROXY.pattern + r"|amap|httpbin|httpbun|高德", re.I)
 PAYLOAD_FIELD = re.compile(r"program|decoded|payload|html|script|content|body|layers", re.I)
+CUTOFF = '2026-09-30T00:00:00+00:00'
 SCAN_FIELDS = ('final_status', 'server_ip', 'server_asn', 'server_as', 'server_country', 'visibility',
                'alert_count', 'user_agent', 'referer', 'exit_node', 'tags', 'requests_total')
 
@@ -311,6 +312,11 @@ def earliest(dates):
     return min(filter(None, map(iso_utc, precise or dates)), default=None)
 
 
+def in_window(r):
+    """Undated reports are kept: nothing places them before the cutoff."""
+    return (earliest(r['dates']) or CUTOFF) >= CUTOFF
+
+
 def serializable(r):
     out = {k: sorted(v) if isinstance(v, set) else v for k, v in r.items() if k not in ('decoded', 'requests')}
     out['requests'] = list(r['requests'].values())
@@ -400,6 +406,7 @@ def main():
     else:
         selected = evidence.load(args.source)
     print(f'Selected {len(selected):,} Amap-related report IDs. Redacting in memory.', flush=True)
+    selected = [r for r in selected if in_window(r)]
     records_out = [serializable(r) for r in selected]
     redactor = Redactor()
     redactor.discover(strings(records_out))
@@ -449,7 +456,7 @@ def main():
         'reports_with_proxy_evidence': sum(r['has_proxy_evidence'] for r in safe),
         'unique_decoded_payloads': len(catalogue), 'file_counts': dict(evidence.file_counts),
         'parse_errors': evidence.errors, 'redaction_audit': checks,
-        'selection': 'Amap/amap.com/Gaode references in saved report evidence, recorded URLs, and recursively decoded base64 carriers. Proxy and redirect wrappers included.',
+        'selection': 'Amap/amap.com/Gaode references in saved report evidence, recorded URLs, and recursively decoded base64 carriers. Proxy and redirect wrappers included. Reports dated before 2026-09-30 UTC are excluded.',
         'limitations': [
             'Coverage is the local findings archive, including saved listings without full captures. No live URLQuery fetches.',
             'Structured JSON/JSONL, gzip JSON, CSV report inventories and report rows in saved HTML listings are inspected. Standalone prose, images and SQLite databases are not scanned.',
