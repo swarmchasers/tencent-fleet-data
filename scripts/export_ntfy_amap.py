@@ -13,7 +13,7 @@ import sqlite3
 import zipfile
 
 from export_findings_amap import UUID, REPORT_URL, audit, records
-from redaction import Redactor, expand, strings
+from redaction import Redactor, strings
 
 FINDINGS = Path('/Users/concurrent/Projects/oai-scraping-test/findings')
 ARCHIVER = Path('/Users/concurrent/Projects/chinese-swarm/ntfy-archiver')
@@ -221,15 +221,11 @@ def main():
     collection.reconcile_observations()
     selected = list(collection.messages.values())
     print(f'Found {len(selected):,} distinct message versions/observations before redaction.', flush=True)
-    expanded = []
-    for item in selected:
-        _, payloads = expand(item['core'].get('message') or '')
-        expanded.append({**item['core'], 'decoded_payloads': payloads})
     redactor = Redactor()
-    redactor.discover(strings(expanded))
+    redactor.discover(strings([item['core'] for item in selected]))
     merged = {}
-    for item, value in zip(selected, expanded, strict=True):
-        safe = redactor.tree(redactor.tree(value))
+    for item in selected:
+        safe = redactor.tree(redactor.tree(item['core']))
         safe['published_at'] = iso_time(safe.get('unix_time'))
         safe['record_kind'] = 'ntfy_message' if safe.get('message_id') else 'ntfy_observation_without_event_id'
         safe['topic_url'] = 'https://ntfy.sh/' + safe['topic']

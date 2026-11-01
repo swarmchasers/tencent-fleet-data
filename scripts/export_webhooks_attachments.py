@@ -280,10 +280,9 @@ def attachments():
             hashes = {m['sha256'] for m in metadata if m.get('sha256')}
             assert not hashes or hashlib.sha256(data).hexdigest() in hashes, 'Cached attachment checksum mismatch'
             text = data.decode('utf-8-sig')
-            _, decoded = expand(text)
             redactor = Redactor()
-            redactor.discover([text, *decoded])
-            safe = redactor.tree(redactor.tree({'decoded_content_redacted': text, 'decoded_payloads': sorted(set(decoded))}))
+            redactor.discover([text])
+            safe = redactor.tree(redactor.tree({'decoded_content_redacted': text}))
             safe.update({'attachment_id': aid, 'source_url': url, 'content_available': True,
                          'source_size_bytes': len(data), 'cached_checksum_verified': bool(hashes),
                          'ntfy_record_ids': sorted(m['record_id'] for m in linked),
