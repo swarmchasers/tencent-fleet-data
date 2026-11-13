@@ -1,6 +1,6 @@
 {
   "schema_version": "1.0",
-  "generated_at": "2026-11-01T21:06:05.765677+00:00",
+  "generated_at": "2026-11-13T13:02:08.706466+00:00",
   "source_directory": "/Users/concurrent/Projects/oai-scraping-test/findings",
   "reports": 3068,
   "reports_with_raw_captures": 2823,
@@ -8,8 +8,8 @@
   "reports_with_proxy_evidence": 219,
   "unique_decoded_payloads": 773,
   "file_counts": {
-    "structured_files_considered": 30355,
-    "parsed_files": 21817,
+    "structured_files_considered": 30368,
+    "parsed_files": 21830,
     "duplicate_files": 8503,
     "csv_inventories": 19,
     "html_files_with_report_links": 2033,
@@ -170,8 +170,9 @@
     "Base64 decoding is local, UTF-8 only, at most six nested levels and four million encoded characters per value.",
     "Payloads include httpbin-compatible /base64/ carriers and nested base64/data-URI carriers. Original encoded carriers are suppressed to prevent secret recovery.",
     "Proxy evidence indicates a known proxy service or proxy/cors URL marker within an Amap-related report; it does not prove every proxy URL targets Amap.",
-    "Secrets, 32-character hex values, and long opaque values are conservatively redacted. Sanitized evidence may no longer execute."
+    "Secrets, 32-character hex values, and long opaque values are conservatively redacted. Sanitized evidence may no longer execute.",
+    "Credential-named flags, modes and counters keep their literal values, such as withCredentials=true or credentials:\"include\"."
   ],
   "provenance": "Exact relative paths of saved files referencing each report ID, including filenames containing that ID.",
-  "provenance_files_inspected": 43868
+  "provenance_files_inspected": 43881
 }

@@ -12,13 +12,43 @@ from urllib.parse import unquote, quote
 AMAP = re.compile(r'(?i)(?<![\w-])(?:[\w-]+\.)*amap\.com\b|\bAMap\b|_AMapSecurityConfig|高德')
 SECRET_NAME = r'(?:[\w$.-]*(?:api[_-]?key|access[_-]?key|secret|security[_-]?(?:js[_-]?)?code|jscode|token|password|passwd|authorization|credential|signature)[\w$.-]*|key|sig|cookie|session(?:id)?)'
 ASSIGN = re.compile(r'''(?ix)(?P<prefix>["']?\b(?P<name>''' + SECRET_NAME + r''')\b["']?\s*[:=]\s*)(?P<quote>["'`])(?P<value>.*?)(?P=quote)''', re.S)
-BARE = re.compile(r'(?i)(?P<prefix>\b'+SECRET_NAME+r'\b\s*[:=]\s*)(?P<value>[^\s&;,<>"\'`{}\[\]()]+)')
+BARE = re.compile(r'(?i)(?P<prefix>\b(?P<name>'+SECRET_NAME+r')\b\s*[:=]\s*)(?P<value>[^\s&;,<>"\'`{}\[\]()]+)')
+# Flags, modes and counters whose names resemble credentials. Kept only with these literal values.
+BENIGN = tuple((re.compile(r'(?i)(?:[\w$-]+\.)*' + name), re.compile(value)) for name, value in (
+    (r'withCredentials', r'true|false|!0|!1'),
+    (r'credentials', r'include|omit|same-origin'),
+    (r'need\w*Token', r'true|false|!0|!1'),
+    (r'\w*tokens', r'\d{1,9}'),
+))
 HEX = re.compile(r'(?i)(?<![a-z0-9])[a-f0-9]{32}(?![a-z0-9])')
 BASE64_URL = re.compile(r'(?i)(/base64/)([^\s<>"\'`?#]+)')
 DATA = re.compile(r'(?i)(data:[^\s,;"\'<>]*;base64,)([a-zA-Z0-9+/=_%-]+)')
 OPAQUE = re.compile(r'(?<![\w])(?:[A-Za-z0-9+/_-]|%[0-9A-Fa-f]{2}){80,}={0,2}')
 URL = re.compile(r'https?://[^\s<>"\'`\\]+', re.I)
 MARK = '[REDACTED]'
+
+
+def benign(name, value):
+    """True for a credential-like name that holds a harmless flag, mode or count."""
+    if isinstance(value, (bool, int)):
+        value = str(value).lower()
+    return isinstance(value, str) and any(n.fullmatch(name) and v.fullmatch(value) for n, v in BENIGN)
+
+
+def harmless(name, value):
+    """Length of a harmless literal that starts a bare value, alone or before a | separator."""
+    head = value.split('|', 1)[0]
+    return len(head) if benign(name, head) else 0
+
+
+def bare_secrets(text):
+    """Bare credential assignments, including those that follow a harmless literal in a |-separated value."""
+    for m in BARE.finditer(text):
+        keep = harmless(m['name'], m['value'])
+        if keep:
+            yield from bare_secrets(m['value'][keep:])
+        else:
+            yield m
 
 
 def unescape_once(text):
@@ -100,11 +130,10 @@ class Redactor:
                 inputs = SensitiveInputs()
                 inputs.feed(v)
                 self.secrets.update(inputs.values)
-                for pattern in (ASSIGN, BARE):
-                    for m in pattern.finditer(v):
-                        secret = m['value']
-                        if secret and secret not in (MARK, 'undefined', 'null', 'true', 'false'):
-                            self.secrets.add(secret)
+                for m in (*ASSIGN.finditer(v), *bare_secrets(v)):
+                    secret = m['value']
+                    if secret and secret not in (MARK, 'undefined', 'null', 'true', 'false'):
+                        self.secrets.add(secret)
                 self.secrets.update(HEX.findall(v))
         forms = set()
         for s in self.secrets:
@@ -125,8 +154,11 @@ class Redactor:
             text = normalized
         text = BASE64_URL.sub(lambda m: m[1] + '[REDACTED_BASE64_PAYLOAD]', text)
         text = DATA.sub(lambda m: m[1] + '[REDACTED_BASE64_PAYLOAD]', text)
-        text = ASSIGN.sub(lambda m: m['prefix'] + m['quote'] + MARK + m['quote'], text)
-        text = BARE.sub(lambda m: m['prefix'] + MARK, text)
+        text = ASSIGN.sub(lambda m: m.group() if benign(m['name'], m['value']) else m['prefix'] + m['quote'] + MARK + m['quote'], text)
+        def bare(m):
+            keep = harmless(m['name'], m['value'])
+            return m['prefix'] + (m['value'][:keep] + BARE.sub(bare, m['value'][keep:]) if keep else MARK)
+        text = BARE.sub(bare, text)
         text = HEX.sub(MARK, text)
         if self.secret_regex:
             text = self.secret_regex.sub(MARK, text)
@@ -145,7 +177,8 @@ class Redactor:
         if isinstance(value, str):
             return self.clean(value)
         if isinstance(value, dict):
-            return {str(k): MARK if re.fullmatch(SECRET_NAME, str(k), re.I) else self.tree(v) for k, v in value.items()}
+            return {str(k): MARK if re.fullmatch(SECRET_NAME, str(k), re.I) and not benign(str(k), v) else self.tree(v)
+                    for k, v in value.items()}
         if isinstance(value, (list, tuple)):
             return [self.tree(v) for v in value]
         if value is None or isinstance(value, (int, float, bool)):

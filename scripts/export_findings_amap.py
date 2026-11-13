@@ -14,8 +14,8 @@ import re
 from pathlib import Path
 
 from redaction import (
-    AMAP, ASSIGN, BARE, BASE64_URL, HEX, MARK, OPAQUE, URL,
-    Redactor, SensitiveInputs, expand, iso_utc, strings, variants,
+    AMAP, ASSIGN, BASE64_URL, HEX, MARK, OPAQUE, URL,
+    Redactor, SensitiveInputs, bare_secrets, benign, expand, iso_utc, strings, variants,
 )
 
 UUID = re.compile(r"[0-9a-f]{8}(?:-[0-9a-f]{4}){3}-[0-9a-f]{12}", re.I)
@@ -329,10 +329,9 @@ def audit(rows):
                                   'encoded_carriers': 0, 'sensitive_inputs': 0})
     for text in strings(rows):
         for exposed in variants(text):
-            for pattern in (ASSIGN, BARE):
-                for m in pattern.finditer(exposed):
-                    if m['value'] != MARK:
-                        issues['sensitive_assignments'] += 1
+            for m in (*ASSIGN.finditer(exposed), *bare_secrets(exposed)):
+                if m['value'] != MARK and not benign(m['name'], m['value']):
+                    issues['sensitive_assignments'] += 1
             issues['hex32_values'] += len(HEX.findall(exposed))
             issues['encoded_carriers'] += sum(not m[2].startswith('[REDACTED') for m in BASE64_URL.finditer(exposed))
         probe = SensitiveInputs()
@@ -464,6 +463,7 @@ def main():
             'Payloads include httpbin-compatible /base64/ carriers and nested base64/data-URI carriers. Original encoded carriers are suppressed to prevent secret recovery.',
             'Proxy evidence indicates a known proxy service or proxy/cors URL marker within an Amap-related report; it does not prove every proxy URL targets Amap.',
             'Secrets, 32-character hex values, and long opaque values are conservatively redacted. Sanitized evidence may no longer execute.',
+            'Credential-named flags, modes and counters keep their literal values, such as withCredentials=true or credentials:"include".',
         ],
     }
     (args.output / 'summary.json').write_text(json.dumps(summary, ensure_ascii=False, indent=2) + '\n')

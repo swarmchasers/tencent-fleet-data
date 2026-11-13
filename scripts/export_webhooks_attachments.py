@@ -15,7 +15,7 @@ from export_ntfy_amap import ARCHIVER, FINDINGS, LEADS, OUTPUT, canonical, parse
 from redaction import Redactor, expand, strings
 
 ROOTS = {'findings': FINDINGS, 'hosted_probe_leads': LEADS, 'ntfy_archiver': ARCHIVER}
-MAILBOX_URL = re.compile(r'webhook\.site/(?:token/)?(' + UUID.pattern + r')', re.I)
+MAILBOX_URL = re.compile(r'webhook\.site/(?:token/|#!/(?:view|edit)/)?(' + UUID.pattern + r')', re.I)
 
 
 def public_id(value):
@@ -99,9 +99,7 @@ class Webhooks:
                 self.scope.pop(mailbox, None)
 
     def add(self, request, source):
-        mailbox = public_id(request.get('token_id'))
-        if mailbox not in self.scope:
-            return None
+        # Every mailbox is kept until the scan ends, because a configuration can extend the scope.
         key = canonical(request)
         value = self.records.setdefault(key, {'request': request, 'sources': {}})
         value['sources'][canonical(source)] = source
@@ -130,8 +128,6 @@ class Webhooks:
                         refs.add(('request', key, pointer))
             if is_config:
                 for config, pointer in native_configurations(obj):
-                    if public_id(config['uuid']) not in self.scope:
-                        continue
                     key = canonical(config)
                     row = self.configurations.setdefault(key, {'configuration': config, 'sources': {}})
                     p = {**source, 'json_pointer': pointer}
@@ -168,6 +164,25 @@ class Webhooks:
                                  'table': 'events', 'received_at': received, 'origin': origin})
         else:
             self.errors.append({'root': 'ntfy_archiver', 'file': 'state/archive.sqlite3', 'note': 'Active WAL: used saved NDJSON.'})
+        self.follow_configurations()
+        self.records = {k: v for k, v in self.records.items() if public_id(v['request']['token_id']) in self.scope}
+        self.configurations = {k: v for k, v in self.configurations.items() if public_id(v['configuration']['uuid']) in self.scope}
+
+    def follow_configurations(self):
+        """Add mailboxes that the saved response of an Amap mailbox sends its visitors to."""
+        found = True
+        while found:
+            found = False
+            for value in list(self.configurations.values()):
+                config = value['configuration']
+                if public_id(config['uuid']) not in self.scope:
+                    continue
+                for text in strings(config):
+                    for mailbox in MAILBOX_URL.findall(text):
+                        mailbox = mailbox.lower()
+                        if mailbox not in self.scope and mailbox not in self.excluded:
+                            self.scope[mailbox].add('referenced_by_amap_mailbox_configuration')
+                            found = True
 
     def export(self):
         values = list(self.records.values())
@@ -305,7 +320,7 @@ def main():
     summary = {'webhooks': collection.export(), 'attachments': attachments(),
                'roots': {k: str(v) for k, v in ROOTS.items()},
                'methodology': ['Only saved local archives are read; no database export is imported.',
-                               'Mailbox scope comes from saved Amap archiver decisions and links in the existing Amap report collection; explicitly classified cancer collectors are excluded.',
+                               'Mailbox scope comes from saved Amap archiver decisions, links in the existing Amap report collection, and mailboxes referenced by the saved response of an in-scope mailbox; explicitly classified cancer collectors are excluded.',
                                'Webhook request objects are deduplicated across captures; changed objects retain distinct versions. Redacted identical versions are merged.',
                                'Public mailbox and request identifiers remain available for joins; authentication headers, API keys and security codes are redacted.',
                                'Attachment content is linked to retained ntfy messages and verified against saved size/checksum metadata before redaction.',

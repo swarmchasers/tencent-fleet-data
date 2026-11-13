@@ -57,6 +57,38 @@ class RedactionTests(unittest.TestCase):
         r.discover([safe])
         self.assertEqual(r.clean(safe), safe)
 
+    def test_credential_named_flags_modes_and_counters_are_preserved(self):
+        fixtures = ['let x=new XMLHttpRequest;x.withCredentials=true;x.open("GET",u)',
+                    "fetch(u,{mode:'no-cors',credentials:'include'})",
+                    "init({appendTo:'header',needUmidToken:!0,paramsType:['uab']})",
+                    'data.httpStatus=200|data.usage.outputTokens=2634 ~~ rawLength=8598']
+        r = exporter.Redactor()
+        r.discover(fixtures)
+        for raw in fixtures:
+            self.assertEqual(r.clean(raw), raw)
+        tree = {'withCredentials': True, 'usage': {'outputTokens': 2634}, 'credentials': 'omit'}
+        self.assertEqual(r.tree(tree), tree)
+
+    def test_counters_in_a_separated_chain_do_not_hide_later_secrets(self):
+        raw = 'data.usage.outputTokens=2634|data.usage.tokens=2634|data.apiKey=synthetic-chained-key-1|data.ok=1'
+        r = exporter.Redactor()
+        r.discover([raw])
+        self.assertEqual(r.clean(raw), 'data.usage.outputTokens=2634|data.usage.tokens=2634|data.apiKey=[REDACTED]')
+        self.assertEqual([m['value'] for m in exporter.bare_secrets(raw)], ['synthetic-chained-key-1|data.ok=1'])
+
+    def test_credential_named_values_that_are_not_literals_are_redacted(self):
+        fixtures = [('x.withCredentials=synthetic-flag-value', 'synthetic-flag-value'),
+                    ("{credentials:'synthetic-user:synthetic-pass'}", 'synthetic-pass'),
+                    ('needUmidToken:synthetic-umid', 'synthetic-umid'),
+                    ('umidToken=12345', '12345'),
+                    ('tokens=synthetic-list', 'synthetic-list')]
+        r = exporter.Redactor()
+        r.discover(s for s, _ in fixtures)
+        for raw, secret in fixtures:
+            self.assertNotIn(secret, r.clean(raw))
+        self.assertEqual(r.tree({'credentials': 'synthetic-pass', 'outputTokens': 'synthetic-list'}),
+                         {'credentials': '[REDACTED]', 'outputTokens': '[REDACTED]'})
+
 
 if __name__ == '__main__':
     unittest.main()

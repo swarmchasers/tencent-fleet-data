@@ -1,12 +1,12 @@
 {
   "webhooks": {
-    "request_versions": 627,
-    "unique_requests": 627,
-    "configuration_versions": 31,
-    "mailboxes_with_captures": 22,
-    "mailboxes_in_scope": 30,
+    "request_versions": 629,
+    "unique_requests": 629,
+    "configuration_versions": 32,
+    "mailboxes_with_captures": 23,
+    "mailboxes_in_scope": 32,
     "source_file_stats": {
-      "files_considered": 43059,
+      "files_considered": 43072,
       "duplicate_files": 429
     },
     "unreadable_files": [],
@@ -35,7 +35,7 @@
   },
   "methodology": [
     "Only saved local archives are read; no database export is imported.",
-    "Mailbox scope comes from saved Amap archiver decisions and links in the existing Amap report collection; explicitly classified cancer collectors are excluded.",
+    "Mailbox scope comes from saved Amap archiver decisions, links in the existing Amap report collection, and mailboxes referenced by the saved response of an in-scope mailbox; explicitly classified cancer collectors are excluded.",
     "Webhook request objects are deduplicated across captures; changed objects retain distinct versions. Redacted identical versions are merged.",
     "Public mailbox and request identifiers remain available for joins; authentication headers, API keys and security codes are redacted.",
     "Attachment content is linked to retained ntfy messages and verified against saved size/checksum metadata before redaction.",

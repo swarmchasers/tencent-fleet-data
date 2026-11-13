@@ -83,6 +83,10 @@ class FindingsTests(unittest.TestCase):
         self.assertTrue(exporter.in_window({'dates': {'2026-09-30 00:00:00+00:00'}}))
         self.assertTrue(exporter.in_window({'dates': set()}))
 
+    def test_audit_ignores_harmless_flags(self):
+        self.assertFalse(any(exporter.audit(['x.withCredentials=true', 'usage.outputTokens=12|usage.tokens=12']).values()))
+        self.assertEqual(exporter.audit(['x.withCredentials=synthetic-flag-value'])['sensitive_assignments'], 1)
+
     def test_listing_and_capture_merge(self):
         rid = '00000000-0000-4000-8000-000000000003'
         with tempfile.TemporaryDirectory() as temp:

@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-11-01T21:07:13.926391+00:00",
+  "generated_at": "2026-11-13T13:03:12.769520+00:00",
   "records": 377,
   "message_records": 377,
   "observations_without_event_id": 0,
@@ -9,7 +9,7 @@
     "hosted_probe_leads": "/Users/concurrent/Projects/chinese-swarm/hosted-probe-leads"
   },
   "files": {
-    "files_considered": 41823,
+    "files_considered": 41836,
     "files_with_amap_topic_reference": 150,
     "duplicate_files": 15,
     "idless_observations_linked_by_exact_topic_time_content": 27
