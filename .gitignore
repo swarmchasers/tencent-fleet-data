@@ -218,3 +218,7 @@ __marimo__/
 
 # Streamlit
 .streamlit/secrets.toml
+
+# Export tooling. It needs the private raw archives, so it stays local.
+/scripts/
+/tests/

@@ -4,9 +4,9 @@
   "message_records": 377,
   "observations_without_event_id": 0,
   "roots": {
-    "findings": "/Users/concurrent/Projects/oai-scraping-test/findings",
-    "ntfy_archiver": "/Users/concurrent/Projects/chinese-swarm/ntfy-archiver",
-    "hosted_probe_leads": "/Users/concurrent/Projects/chinese-swarm/hosted-probe-leads"
+    "findings": "findings",
+    "ntfy_archiver": "ntfy-archiver",
+    "hosted_probe_leads": "hosted-probe-leads"
   },
   "files": {
     "files_considered": 41836,

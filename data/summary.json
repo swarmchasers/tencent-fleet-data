@@ -1,7 +1,7 @@
 {
   "schema_version": "1.0",
   "generated_at": "2026-11-13T13:02:08.706466+00:00",
-  "source_directory": "/Users/concurrent/Projects/oai-scraping-test/findings",
+  "source_directory": "findings",
   "reports": 3068,
   "reports_with_raw_captures": 2823,
   "reports_with_decoded_payloads": 712,

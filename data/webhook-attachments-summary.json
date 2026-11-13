@@ -29,9 +29,9 @@
     }
   },
   "roots": {
-    "findings": "/Users/concurrent/Projects/oai-scraping-test/findings",
-    "hosted_probe_leads": "/Users/concurrent/Projects/chinese-swarm/hosted-probe-leads",
-    "ntfy_archiver": "/Users/concurrent/Projects/chinese-swarm/ntfy-archiver"
+    "findings": "findings",
+    "hosted_probe_leads": "hosted-probe-leads",
+    "ntfy_archiver": "ntfy-archiver"
   },
   "methodology": [
     "Only saved local archives are read; no database export is imported.",
